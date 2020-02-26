@@ -2,14 +2,19 @@
 /**
  * Slim Framework (https://slimframework.com)
  *
- * @license https://github.com/slimphp/Slim/blob/3.x/LICENSE.md (MIT License)
+ * @link      https://github.com/codeguy/Slim
+ * @copyright Copyright (c) 2011-2016 Josh Lockhart
+ * @license   https://github.com/codeguy/Slim/blob/master/LICENSE (MIT License)
  */
-
 namespace Slim\Exception;
 
-use Psr\Container\ContainerExceptionInterface;
 use InvalidArgumentException;
+use Interop\Container\Exception\ContainerException as InteropContainerException;
 
-class ContainerException extends InvalidArgumentException implements ContainerExceptionInterface
+/**
+ * Container Exception
+ */
+class ContainerException extends InvalidArgumentException implements InteropContainerException
 {
+
 }
