@@ -17,12 +17,11 @@ $app = new Slim\App($configs);
 
 /* ROUTES */
 $app->get('/', function ($request, $response) {
-	return "Test!";
+	return "Lanjutkan!";
 });
 
 $app->post('/', function ($request, $response)
 {
-    return 'abc';
 	// get request body and line signature header
 	$body 	   = file_get_contents('php://input');
 	$signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
@@ -32,14 +31,12 @@ $app->post('/', function ($request, $response)
 
 	// is LINE_SIGNATURE exists in request header?
 	if (empty($signature)){
-		echo 'empty';
-	    return $response->withStatus(400, 'Signature not set');
+		return $response->withStatus(400, 'Signature not set');
 	}
 
 	// is this request comes from LINE?
 	if($_ENV['PASS_SIGNATURE'] == false && ! SignatureValidator::validateSignature($body, $_ENV['CHANNEL_SECRET'], $signature)){
-		echo 'grr';
-	    return $response->withStatus(400, 'Invalid signature');
+		return $response->withStatus(400, 'Invalid signature');
 	}
 
 	// init bot
@@ -48,14 +45,12 @@ $app->post('/', function ($request, $response)
 	$data = json_decode($body, true);
 	foreach ($data['events'] as $event)
 	{
-	    echo 'aaaa';
 		$userMessage = $event['message']['text'];
 		if(strtolower($userMessage) == 'halo')
 		{
 			$message = "Halo juga";
             $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
 			$result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
-			echo 'a';
 			return $result->getHTTPStatus() . ' ' . $result->getRawBody();
 		
 		}
