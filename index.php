@@ -1,9 +1,9 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Factory\AppFactory;
+//use Slim\Factory\AppFactory;
 
 use \LINE\LINEBot;
 use \LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -73,7 +73,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
 
 
-                    $response->getBody()->write($result->getJSONDecodedBody());
+                    $response->getBody()->write((string)$result->getJSONDecodedBody());
                     return $response
                         ->withHeader('Content-Type', 'application/json')
                         ->withStatus($result->getHTTPStatus());
