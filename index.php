@@ -22,6 +22,7 @@ $app->get('/', function ($request, $response) {
 
 $app->post('/', function ($request, $response)
 {
+    echo 'ab';
 	// get request body and line signature header
 	$body 	   = file_get_contents('php://input');
 	$signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
@@ -51,6 +52,7 @@ $app->post('/', function ($request, $response)
 			$message = "Halo juga";
             $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
 			$result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+			echo 'a';
 			return $result->getHTTPStatus() . ' ' . $result->getRawBody();
 		
 		}
