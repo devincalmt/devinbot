@@ -29,8 +29,9 @@ $app = new Slim\App($configs);
 //$app->setBasePath("/public");
 
 $app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello World!");
-    return $response;
+    return "a";
+//    $response->getBody()->write("Hello World!");
+//    return $response;
 });
 
 // buat route untuk webhook
