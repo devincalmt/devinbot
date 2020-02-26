@@ -42,20 +42,31 @@ $app->post('/', function ($request, $response)
 	// init bot
 	$httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($_ENV['CHANNEL_ACCESS_TOKEN']);
 	$bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $_ENV['CHANNEL_SECRET']]);
-	$data = json_decode($body, true);
-	foreach ($data['events'] as $event)
-	{
-	    echo "a";
-		$userMessage = $event['message']['text'];
-		if(strtolower($userMessage) == 'halo')
-		{
-			$message = "Halo juga";
-            $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
-			$result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
-			return $result->getHTTPStatus() . ' ' . $result->getRawBody();
-		
-		}
-	}
+    $data = json_decode($body, true);
+    if(is_array($data['events'])){
+        foreach ($data['events'] as $event)
+        {
+            if ($event['type'] == 'message')
+            {
+                if($event['message']['type'] == 'text')
+                {
+                    // send same message as reply to user
+                    $result = $bot->replyText($event['replyToken'], $event['message']['text']);
+
+
+                    // or we can use replyMessage() instead to send reply message
+                    // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
+                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+
+
+                    $response->getBody()->write($result->getJSONDecodedBody());
+                    return $response
+                        ->withHeader('Content-Type', 'application/json')
+                        ->withStatus($result->getHTTPStatus());
+                }
+            }
+        }
+    }
 	
 
 });
