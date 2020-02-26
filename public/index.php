@@ -19,8 +19,8 @@ $channel_access_token = "";
 $channel_secret = "";
 
 // inisiasi objek bot
-$httpClient = new CurlHTTPClient($channel_access_token);
-$bot = new LINEBot($httpClient, ['channelSecret' => $channel_secret]);
+$dotenv = new Dotenv\Dotenv(__DIR__);
+$dotenv->load();
 
 $configs =  [
     'settings' => ['displayErrorDetails' => true],
