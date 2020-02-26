@@ -45,6 +45,7 @@ $app->post('/', function ($request, $response)
 	$data = json_decode($body, true);
 	foreach ($data['events'] as $event)
 	{
+	    echo "a";
 		$userMessage = $event['message']['text'];
 		if(strtolower($userMessage) == 'halo')
 		{
