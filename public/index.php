@@ -23,8 +23,11 @@ $pass_signature = true;
 $httpClient = new CurlHTTPClient($channel_access_token);
 $bot = new LINEBot($httpClient, ['channelSecret' => $channel_secret]);
 
-$app = AppFactory::create();
-$app->setBasePath("/public");
+$configs =  [
+    'settings' => ['displayErrorDetails' => true],
+];
+$app = new Slim\App($configs);
+//$app->setBasePath("/public");
 
 $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello World!");
