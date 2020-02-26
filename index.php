@@ -17,7 +17,6 @@ $pass_signature = true;
 // set LINE channel_access_token and channel_secret
 $channel_access_token = "6PCsA2dmn0JEc1bsAzBSxGJaJjHF3cRwVRSgGBzaxXrp+Wbp3saU/D0bXYRvrF2rVhcrQ9EGUpEwesnfSpqimlayfy5iVjdclFkLhfrlnqU9ToKDYEATtBKJGMCYiOwOUyXJlw2PKe+rPWAcNVyXXwdB04t89/1O/w1cDnyilFU=";
 $channel_secret = "bec4d1db205ee33572c3f0321203947b";
-$pass_signature = true;
 
 // inisiasi objek bot
 $httpClient = new CurlHTTPClient($channel_access_token);
@@ -30,8 +29,9 @@ $app = new Slim\App($configs);
 //$app->setBasePath("/public");
 
 $app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello World!");
-    return $response;
+//    $response->getBody()->write("Hello World!");
+//    return $response;
+    return "aaa";
 });
 
 // buat route untuk webhook
@@ -56,6 +56,30 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
     }
 
 // kode aplikasi nanti disini
+    $data = json_decode($body, true);
+    if(is_array($data['events'])){
+        foreach ($data['events'] as $event)
+        {
+            if ($event['type'] == 'message')
+            {
+                if($event['message']['type'] == 'text')
+                {
+                    // send same message as reply to user
+                    $result = $bot->replyText($event['replyToken'], $event['message']['text']);
 
+
+                    // or we can use replyMessage() instead to send reply message
+                    // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
+                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+
+
+                    $response->getBody()->write($result->getJSONDecodedBody());
+                    return $response
+                        ->withHeader('Content-Type', 'application/json')
+                        ->withStatus($result->getHTTPStatus());
+                }
+            }
+        }
+    }
 });
 $app->run();
