@@ -22,7 +22,7 @@ $app->get('/', function ($request, $response) {
 
 $app->post('/', function ($request, $response)
 {
-    echo 'ab';
+    echo 'abc';
 	// get request body and line signature header
 	$body 	   = file_get_contents('php://input');
 	$signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
@@ -32,12 +32,14 @@ $app->post('/', function ($request, $response)
 
 	// is LINE_SIGNATURE exists in request header?
 	if (empty($signature)){
-		return $response->withStatus(400, 'Signature not set');
+		echo 'empty';
+	    return $response->withStatus(400, 'Signature not set');
 	}
 
 	// is this request comes from LINE?
 	if($_ENV['PASS_SIGNATURE'] == false && ! SignatureValidator::validateSignature($body, $_ENV['CHANNEL_SECRET'], $signature)){
-		return $response->withStatus(400, 'Invalid signature');
+		echo 'grr';
+	    return $response->withStatus(400, 'Invalid signature');
 	}
 
 	// init bot
@@ -46,6 +48,7 @@ $app->post('/', function ($request, $response)
 	$data = json_decode($body, true);
 	foreach ($data['events'] as $event)
 	{
+	    echo 'aaaa';
 		$userMessage = $event['message']['text'];
 		if(strtolower($userMessage) == 'halo')
 		{
