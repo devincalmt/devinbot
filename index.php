@@ -3,73 +3,57 @@
 require __DIR__ . '/vendor/autoload.php';
 
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
+ 
+use \LINE\LINEBot;
+use \LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use \LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
+use \LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use \LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
 use \LINE\LINEBot\SignatureValidator as SignatureValidator;
-
-// load config
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
-
-// initiate app
-$configs =  [
-	'settings' => ['displayErrorDetails' => true],
-];
-$app = new Slim\App($configs);
-
-/* ROUTES */
-$app->get('/', function ($request, $response) {
-	return "Lanjutkannn!";
+ 
+$pass_signature = true;
+ 
+// set LINE channel_access_token and channel_secret
+$channel_access_token = "";
+$channel_secret = "";
+ 
+// inisiasi objek bot
+$httpClient = new CurlHTTPClient($channel_access_token);
+$bot = new LINEBot($httpClient, ['channelSecret' => $channel_secret]);
+ 
+$app = AppFactory::create();
+ 
+$app->get('/', function (Request $request, Response $response, $args) {
+    // $response->getBody()->write("Hello World!");
+	// return $response;
+	return "hello";
 });
-
-$app->post('/', function ($request, $response)
-{
-	echo 'a';
-	// get request body and line signature header
-	$body 	   = file_get_contents('php://input');
-	$signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
-
-	// log body and signature
-	file_put_contents('php://stderr', 'Body: '.$body);
-
-	// is LINE_SIGNATURE exists in request header?
-	if (empty($signature)){
-		return $response->withStatus(400, 'Signature not set');
-	}
-
-	// is this request comes from LINE?
-	if($_ENV['PASS_SIGNATURE'] == false && ! SignatureValidator::validateSignature($body, $_ENV['CHANNEL_SECRET'], $signature)){
-		return $response->withStatus(400, 'Invalid signature');
-	}
-
-	// init bot
-	$httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($_ENV['CHANNEL_ACCESS_TOKEN']);
-	$bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $_ENV['CHANNEL_SECRET']]);
-	$data = json_decode($body, true);
-	foreach ($data['events'] as $event)
-	{
-		$userMessage = $event['message']['text'];
-		if(strtolower($userMessage) == 'halo')
-		{
-			$message = "Halo juga";
-            $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
-			$result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
-			return $result->getHTTPStatus() . ' ' . $result->getRawBody();
-		
-		}
-	}
-	
-
+ 
+// buat route untuk webhook
+$app->post('/', function (Request $request, Response $response) use ($channel_secret, $bot, $httpClient, $pass_signature) {
+    // get request body and line signature header
+    $body = $request->getBody();
+    $signature = $request->getHeaderLine('HTTP_X_LINE_SIGNATURE');
+ 
+    // log body and signature
+    file_put_contents('php://stderr', 'Body: ' . $body);
+ 
+    if ($pass_signature === false) {
+        // is LINE_SIGNATURE exists in request header?
+        if (empty($signature)) {
+            return $response->withStatus(400, 'Signature not set');
+        }
+ 
+        // is this request comes from LINE?
+        if (!SignatureValidator::validateSignature($body, $channel_secret, $signature)) {
+            return $response->withStatus(400, 'Invalid signature');
+        }
+    }
+    
+// kode aplikasi nanti disini
+ 
 });
-
-// $app->get('/push/{to}/{message}', function ($request, $response, $args)
-// {
-// 	$httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient($_ENV['CHANNEL_ACCESS_TOKEN']);
-// 	$bot = new \LINE\LINEBot($httpClient, ['channelSecret' => $_ENV['CHANNEL_SECRET']]);
-
-// 	$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($args['message']);
-// 	$result = $bot->pushMessage($args['to'], $textMessageBuilder);
-
-// 	return $result->getHTTPStatus() . ' ' . $result->getRawBody();
-// });
-
-/* JUST RUN IT */
 $app->run();
