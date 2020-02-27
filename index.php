@@ -30,7 +30,7 @@ $configs =  [
 $app = new Slim\App($configs);
  
 $app->get('/', function (Request $request, Response $response, $args) {
-     $response->getBody()->write("Hello World!");
+     $response->getBody()->write(":D");
 	 return $response;
 //	return "hello";
 });
@@ -57,6 +57,30 @@ $app->post('/', function (Request $request, Response $response) use ($channel_se
     }
     
 // kode aplikasi nanti disini
- 
+    $data = json_decode($body, true);
+    if(is_array($data['events'])){
+        foreach ($data['events'] as $event)
+        {
+            if ($event['type'] == 'message')
+            {
+                if($event['message']['type'] == 'text')
+                {
+                    // send same message as reply to user
+//                    $result = $bot->replyText($event['replyToken'], $event['message']['text']);
+                    $result = $bot->replyText($event['replyToken'], 'ini pesan balasan');
+
+                    // or we can use replyMessage() instead to send reply message
+                    // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
+                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+
+
+                    $response->getBody()->write($result->getJSONDecodedBody());
+                    return $response
+                        ->withHeader('Content-Type', 'application/json')
+                        ->withStatus($result->getHTTPStatus());
+                }
+            }
+        }
+    }
 });
 $app->run();
