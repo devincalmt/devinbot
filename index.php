@@ -40,7 +40,8 @@ $app->post('/', function (Request $request, Response $response) use ($channel_se
     // get request body and line signature header
     $body = $request->getBody();
     $signature = $request->getHeaderLine('HTTP_X_LINE_SIGNATURE');
- 
+
+    echo 'a';
     // log body and signature
     file_put_contents('php://stderr', 'Body: ' . $body);
  
