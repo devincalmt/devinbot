@@ -17,7 +17,7 @@ $app = new Slim\App($configs);
 
 /* ROUTES */
 $app->get('/', function ($request, $response) {
-	return "Lanjutkann!";
+	return "Lanjutkannn!";
 });
 
 $app->post('/', function ($request, $response)
