@@ -22,6 +22,7 @@ $app->get('/', function ($request, $response) {
 
 $app->post('/', function ($request, $response)
 {
+	echo 'a';
 	// get request body and line signature header
 	$body 	   = file_get_contents('php://input');
 	$signature = $_SERVER['HTTP_X_LINE_SIGNATURE'];
