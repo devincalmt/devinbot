@@ -30,7 +30,7 @@ $configs =  [
 $app = new Slim\App($configs);
  
 $app->get('/', function (Request $request, Response $response, $args) {
-     $response->getBody()->write(":DD");
+     $response->getBody()->write(":DDD");
 	 return $response;
 //	return "hello";
 });
