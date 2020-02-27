@@ -30,9 +30,9 @@ $configs =  [
 $app = new Slim\App($configs);
  
 $app->get('/', function (Request $request, Response $response, $args) {
-    // $response->getBody()->write("Hello World!");
-	// return $response;
-	return "hello";
+     $response->getBody()->write("Hello World!");
+	 return $response;
+//	return "hello";
 });
  
 // buat route untuk webhook
