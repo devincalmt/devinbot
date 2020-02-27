@@ -37,51 +37,70 @@ $app->get('/', function (Request $request, Response $response, $args) {
  
 // buat route untuk webhook
 $app->post('/', function (Request $request, Response $response) use ($channel_secret, $bot, $httpClient, $pass_signature) {
+
+    $url = 'https://api.line.me/v2/bot/message/push';
+    $message = array('type' => 'text', 'text' => 'hello');
+    $data = array('to' => 'U3c6d1a697626b9883dbca7dfe9451969', 'messages' => array($message, $message));
+
+// use key 'http' even if you send the request to https://...
+    $options = array(
+        'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        )
+    );
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    if ($result === FALSE) { /* Handle error */ }
+
+    var_dump($result);
+
     // get request body and line signature header
-    $body = $request->getBody();
-    $signature = $request->getHeaderLine('HTTP_X_LINE_SIGNATURE');
-
-    echo 'a';
-    // log body and signature
-    file_put_contents('php://stderr', 'Body: ' . $body);
- 
-    if ($pass_signature === false) {
-        // is LINE_SIGNATURE exists in request header?
-        if (empty($signature)) {
-            return $response->withStatus(400, 'Signature not set');
-        }
- 
-        // is this request comes from LINE?
-        if (!SignatureValidator::validateSignature($body, $channel_secret, $signature)) {
-            return $response->withStatus(400, 'Invalid signature');
-        }
-    }
-    
-// kode aplikasi nanti disini
-    $data = json_decode($body, true);
-    if(is_array($data['events'])){
-        foreach ($data['events'] as $event)
-        {
-            if ($event['type'] == 'message')
-            {
-                if($event['message']['type'] == 'text')
-                {
-                    // send same message as reply to user
-//                    $result = $bot->replyText($event['replyToken'], $event['message']['text']);
-                    $result = $bot->replyText($event['replyToken'], 'ini pesan balasan');
-
-                    // or we can use replyMessage() instead to send reply message
-                    // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
-                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
-
-
-                    $response->getBody()->write($result->getJSONDecodedBody());
-                    return $response
-                        ->withHeader('Content-Type', 'application/json')
-                        ->withStatus($result->getHTTPStatus());
-                }
-            }
-        }
-    }
+//    $body = $request->getBody();
+//    $signature = $request->getHeaderLine('HTTP_X_LINE_SIGNATURE');
+//
+//    echo 'a';
+//    // log body and signature
+//    file_put_contents('php://stderr', 'Body: ' . $body);
+//
+//    if ($pass_signature === false) {
+//        // is LINE_SIGNATURE exists in request header?
+//        if (empty($signature)) {
+//            return $response->withStatus(400, 'Signature not set');
+//        }
+//
+//        // is this request comes from LINE?
+//        if (!SignatureValidator::validateSignature($body, $channel_secret, $signature)) {
+//            return $response->withStatus(400, 'Invalid signature');
+//        }
+//    }
+//
+//// kode aplikasi nanti disini
+//    $data = json_decode($body, true);
+//    if(is_array($data['events'])){
+//        foreach ($data['events'] as $event)
+//        {
+//            if ($event['type'] == 'message')
+//            {
+//                if($event['message']['type'] == 'text')
+//                {
+//                    // send same message as reply to user
+////                    $result = $bot->replyText($event['replyToken'], $event['message']['text']);
+//                    $result = $bot->replyText($event['replyToken'], 'ini pesan balasan');
+//
+//                    // or we can use replyMessage() instead to send reply message
+//                    // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
+//                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
+//
+//
+//                    $response->getBody()->write($result->getJSONDecodedBody());
+//                    return $response
+//                        ->withHeader('Content-Type', 'application/json')
+//                        ->withStatus($result->getHTTPStatus());
+//                }
+//            }
+//        }
+//    }
 });
 $app->run();
