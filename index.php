@@ -30,7 +30,7 @@ $configs =  [
 $app = new Slim\App($configs);
  
 $app->get('/', function (Request $request, Response $response, $args) {
-     $response->getBody()->write(":DDD");
+     $response->getBody()->write(":DDDD");
 	 return $response;
 //	return "hello";
 });
@@ -38,23 +38,33 @@ $app->get('/', function (Request $request, Response $response, $args) {
 // buat route untuk webhook
 $app->post('/', function (Request $request, Response $response) use ($channel_secret, $bot, $httpClient, $pass_signature) {
 
-    $url = 'https://api.line.me/v2/bot/message/push';
-    $message = array('type' => 'text', 'text' => 'hello');
-    $data = array('to' => 'U3c6d1a697626b9883dbca7dfe9451969', 'messages' => array($message, $message));
+    // Initialize Guzzle client
+        $client = new GuzzleHttp\Client();
 
-// use key 'http' even if you send the request to https://...
-    $options = array(
-        'http' => array(
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method'  => 'POST',
-            'content' => http_build_query($data)
-        )
-    );
-    $context  = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-//    if ($result === FALSE) { /* Handle error */ }
+    // Create a POST request
+        $response = $client->request(
+            'POST',
+            'https://api.line.me/v2/bot/message/push',
+            ['headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Bearer G7+gXh9GAHlvjWuTOIM/LuDi5Qb4uzZllHkxUA8wULhnYkJtb9W64zomfgFiReF/VhcrQ9EGUpEwesnfSpqimlayfy5iVjdclFkLhfrlnqUmzc478dBVtoWsRcIiTLa8Wrx1JHEYWvi7he58hTdqNwdB04t89/1O/w1cDnyilFU=']],
+            [
+                'form_params' => [
+                    'to' => 'U3c6d1a697626b9883dbca7dfe9451969',
+                    [
+                      'messages' => [
+                          ['type' => 'text', 'text' => 'Hello'],
+                          ['type' => 'text', 'text' => 'Hello2']
+                      ]
+                    ]
+                ]
+            ]
+        );
 
-    var_dump($options);
+    // Parse the response object, e.g. read the headers, body, etc.
+        $headers = $response->getHeaders();
+        $body = $response->getBody();
+
+    // Output headers and body for debugging purposes
+        var_dump($headers, $body);
 
     // get request body and line signature header
 //    $body = $request->getBody();
