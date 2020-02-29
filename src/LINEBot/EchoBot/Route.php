@@ -39,6 +39,7 @@ class Route
             $password = getenv("PASSWORD");
             $dbname = getenv("DBNAME");
 
+            var_dump($servername);
 // Create connection
             $conn = mysqli_connect($servername, $username, $password, $dbname);
 
