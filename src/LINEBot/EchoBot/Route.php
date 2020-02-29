@@ -31,50 +31,71 @@ class Route
 {
     public function register(App $app)
     {
-        $app->get('/', function (Request $req, Response $res){
-            $res->getBody()->write(":DD");
-            return $res;
-        });
+        $app->get('/', 'UserController:index');
+//        $app->get('/', function (Request $req, Response $res){
+////            $res->getBody()->write(":DD");
+////            return $res;
+//            $servername = "us-cdbr-iron-east-04.cleardb.net";
+//            $username = "b1f3fa9bda05bb";
+//            $password = "10d0741f";
+//            $dbname = "heroku_fdb27654ad74a1b";
+//
+//// Create connection
+//            $conn = mysqli_connect($servername, $username, $password, $dbname);
+//
+//// Check connection
+//            if (!$conn) {
+//                die("Connection failed: " . mysqli_connect_error());
+//            }
+//            echo "Connected successfully";
+//
+//            $this->test();
+//        });
 
-        $app->post('/', function (Request $req, Response $res) {
-            /** @var \LINE\LINEBot $bot */
-            $bot = $this->bot;
-            /** @var \Monolog\Logger $logger */
-            $logger = $this->logger;
+        $app->post('/', 'UserController:help');
+//        $app->post('/', function (Request $req, Response $res) {
+//            /** @var \LINE\LINEBot $bot */
+//            $bot = $this->bot;
+//            /** @var \Monolog\Logger $logger */
+//            $logger = $this->logger;
+//
+//            $signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
+//            if (empty($signature)) {
+//                return $res->withStatus(400, 'Bad Request');
+//            }
+//
+//            // Check request with signature and parse request
+//            try {
+//                $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
+//            } catch (InvalidSignatureException $e) {
+//                return $res->withStatus(400, 'Invalid signature');
+//            } catch (InvalidEventRequestException $e) {
+//                return $res->withStatus(400, "Invalid event request");
+//            }
+//
+//            foreach ($events as $event) {
+//                if (!($event instanceof MessageEvent)) {
+//                    $logger->info('Non message event has come');
+//                    continue;
+//                }
+//
+//                if (!($event instanceof TextMessage)) {
+//                    $logger->info('Non text message has come');
+//                    continue;
+//                }
+//
+//                $replyText = $event->getText();
+//                $logger->info('Reply text: ' . $replyText);
+//                $resp = $bot->replyText($event->getReplyToken(), $replyText);
+//                $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
+//            }
+//
+//            $res->write('OK');
+//            return $res;
+//        });
+    }
 
-            $signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
-            if (empty($signature)) {
-                return $res->withStatus(400, 'Bad Request');
-            }
-
-            // Check request with signature and parse request
-            try {
-                $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
-            } catch (InvalidSignatureException $e) {
-                return $res->withStatus(400, 'Invalid signature');
-            } catch (InvalidEventRequestException $e) {
-                return $res->withStatus(400, "Invalid event request");
-            }
-
-            foreach ($events as $event) {
-                if (!($event instanceof MessageEvent)) {
-                    $logger->info('Non message event has come');
-                    continue;
-                }
-
-                if (!($event instanceof TextMessage)) {
-                    $logger->info('Non text message has come');
-                    continue;
-                }
-
-                $replyText = $event->getText();
-                $logger->info('Reply text: ' . $replyText);
-                $resp = $bot->replyText($event->getReplyToken(), $replyText);
-                $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
-            }
-
-            $res->write('OK');
-            return $res;
-        });
+    public function test(){
+        echo 'a';
     }
 }

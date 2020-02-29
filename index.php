@@ -19,6 +19,7 @@
 use LINE\LINEBot\EchoBot\Dependency;
 use LINE\LINEBot\EchoBot\Route;
 use LINE\LINEBot\EchoBot\Setting;
+use LINE\LINEBot\EchoBot\UserController;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
