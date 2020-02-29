@@ -87,7 +87,7 @@ class Route
                     if ($result->num_rows > 0) {
                         // output data of each row
                         while ($row = $result->fetch_assoc()) {
-                            $str .= ($row["id"] . " " . $row["name"] . "<br>");
+                            $str .= ($row["id"] . " " . $row["name"] . "\n");
                         }
                     } else {
                         echo "0 results";
