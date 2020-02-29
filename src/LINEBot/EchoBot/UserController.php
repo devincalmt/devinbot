@@ -33,8 +33,17 @@ class UserController
         }
         echo "Connected successfully";
 
-        $sql = "CREATE TABLE help (id int, name varchar(255))";
-        $conn->query($sql);
+        $sql = "SELECT * FROM help";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                echo $row["id"]. " " . $row["name"] . "<br>";
+            }
+        } else {
+            echo "0 results";
+        }
 
         $conn->close();
     }
@@ -73,7 +82,7 @@ class UserController
                     }
                     echo "Connected successfully";
 
-                    $sql = "SELECT * FROM Help";
+                    $sql = "SELECT * FROM help";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
