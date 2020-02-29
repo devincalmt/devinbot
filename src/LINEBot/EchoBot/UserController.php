@@ -71,34 +71,45 @@ class UserController
             $str = "1";
 
             foreach ($events as $event) {
-                if ($event->getText() == 'help') {
-                    $servername = "us-cdbr-iron-east-04.cleardb.net";
-                    $username = "b1f3fa9bda05bb";
-                    $password = "10d0741f";
-                    $dbname = "heroku_fdb27654ad74a1b";
-
-                    $conn = mysqli_connect($servername, $username, $password, $dbname);
-
-                    if (!$conn) {
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
-                    echo "Connected successfully";
-
-                    $sql = "SELECT * FROM help";
-                    $result = $conn->query($sql);
-
-
-                    if ($result->num_rows > 0) {
-                        // output data of each row
-                        while($row = $result->fetch_assoc()) {
-                            $str .= ($row["id"]. " " . $row["name"] . "<br>");
-                        }
-                    } else {
-                        echo "0 results";
-                    }
-                    $conn->close();
+                if (!($event instanceof MessageEvent)) {
+                    $logger->info('Non message event has come');
+                    continue;
                 }
-                $replyText = $str;
+
+                if (!($event instanceof TextMessage)) {
+                    $logger->info('Non text message has come');
+                    continue;
+                }
+
+//                if ($event->getText() == 'help') {
+//                    $servername = "us-cdbr-iron-east-04.cleardb.net";
+//                    $username = "b1f3fa9bda05bb";
+//                    $password = "10d0741f";
+//                    $dbname = "heroku_fdb27654ad74a1b";
+//
+//                    $conn = mysqli_connect($servername, $username, $password, $dbname);
+//
+//                    if (!$conn) {
+//                        die("Connection failed: " . mysqli_connect_error());
+//                    }
+//                    echo "Connected successfully";
+//
+//                    $sql = "SELECT * FROM help";
+//                    $result = $conn->query($sql);
+//
+//
+//                    if ($result->num_rows > 0) {
+//                        // output data of each row
+//                        while($row = $result->fetch_assoc()) {
+//                            $str .= ($row["id"]. " " . $row["name"] . "<br>");
+//                        }
+//                    } else {
+//                        echo "0 results";
+//                    }
+//                    $conn->close();
+//                }
+                $replyText = $event->getText();
+//                $replyText = $str;
                 $logger->info('Reply text: ' . $replyText);
                 $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
