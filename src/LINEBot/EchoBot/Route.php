@@ -33,7 +33,7 @@ class Route
     {
         $app->get('/', 'UserController:index');
 
-        $app->post('/', 'UserController:displayHelp');
+        $app->post('/', 'UserController:help');
 //        $app->post('/', function (Request $req, Response $res) {
 //            /** @var \LINE\LINEBot $bot */
 //            $bot = $this->bot;
