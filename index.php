@@ -1,116 +1,31 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+/**
+ * Copyright 2016 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 
+use LINE\LINEBot\EchoBot\Dependency;
+use LINE\LINEBot\EchoBot\Route;
+use LINE\LINEBot\EchoBot\Setting;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
- 
-use \LINE\LINEBot;
-use \LINE\LINEBot\HTTPClient\CurlHTTPClient;
-use \LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
-use \LINE\LINEBot\MessageBuilder\TextMessageBuilder;
-use \LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
-use \LINE\LINEBot\SignatureValidator as SignatureValidator;
- 
-$pass_signature = true;
- 
-// set LINE channel_access_token and channel_secret
-$channel_access_token = "G7+gXh9GAHlvjWuTOIM/LuDi5Qb4uzZllHkxUA8wULhnYkJtb9W64zomfgFiReF/VhcrQ9EGUpEwesnfSpqimlayfy5iVjdclFkLhfrlnqUmzc478dBVtoWsRcIiTLa8Wrx1JHEYWvi7he58hTdqNwdB04t89/1O/w1cDnyilFU=";
-$channel_secret = "bec4d1db205ee33572c3f0321203947b";
- 
-// inisiasi objek bot
-$httpClient = new CurlHTTPClient($channel_access_token);
-$bot = new LINEBot($httpClient, ['channelSecret' => $channel_secret]);
+require_once __DIR__ . '/vendor/autoload.php';
 
-// initiate app
-$configs =  [
-    'settings' => ['displayErrorDetails' => true],
-];
-$app = new Slim\App($configs);
- 
-$app->get('/', function (Request $request, Response $response, $args) {
-     $response->getBody()->write(":DDDD");
-	 return $response;
-//	return "hello";
-});
- 
-// buat route untuk webhook
-$app->post('/', function (Request $request, Response $response) use ($channel_secret, $bot, $httpClient, $pass_signature) {
+$setting = Setting::getSetting();
+$app = new Slim\App($setting);
 
-    // Initialize Guzzle client
-        $client = new GuzzleHttp\Client();
+(new Dependency())->register($app);
+(new Route())->register($app);
 
-    // Create a POST request
-        $response = $client->request(
-            'POST',
-            'https://api.line.me/v2/bot/message/push',
-            ['headers' => ['Content-Type' => 'application/json', 'Authorization' => 'Bearer G7+gXh9GAHlvjWuTOIM/LuDi5Qb4uzZllHkxUA8wULhnYkJtb9W64zomfgFiReF/VhcrQ9EGUpEwesnfSpqimlayfy5iVjdclFkLhfrlnqUmzc478dBVtoWsRcIiTLa8Wrx1JHEYWvi7he58hTdqNwdB04t89/1O/w1cDnyilFU=']],
-            [
-                'form_params' => [
-                    'to' => 'U3c6d1a697626b9883dbca7dfe9451969',
-                    [
-                      'messages' => [
-                          ['type' => 'text', 'text' => 'Hello'],
-                          ['type' => 'text', 'text' => 'Hello2']
-                      ]
-                    ]
-                ]
-            ]
-        );
-
-    // Parse the response object, e.g. read the headers, body, etc.
-        $headers = $response->getHeaders();
-        $body = $response->getBody();
-
-    // Output headers and body for debugging purposes
-        var_dump($headers, $body);
-
-    // get request body and line signature header
-//    $body = $request->getBody();
-//    $signature = $request->getHeaderLine('HTTP_X_LINE_SIGNATURE');
-//
-//    echo 'a';
-//    // log body and signature
-//    file_put_contents('php://stderr', 'Body: ' . $body);
-//
-//    if ($pass_signature === false) {
-//        // is LINE_SIGNATURE exists in request header?
-//        if (empty($signature)) {
-//            return $response->withStatus(400, 'Signature not set');
-//        }
-//
-//        // is this request comes from LINE?
-//        if (!SignatureValidator::validateSignature($body, $channel_secret, $signature)) {
-//            return $response->withStatus(400, 'Invalid signature');
-//        }
-//    }
-//
-//// kode aplikasi nanti disini
-//    $data = json_decode($body, true);
-//    if(is_array($data['events'])){
-//        foreach ($data['events'] as $event)
-//        {
-//            if ($event['type'] == 'message')
-//            {
-//                if($event['message']['type'] == 'text')
-//                {
-//                    // send same message as reply to user
-////                    $result = $bot->replyText($event['replyToken'], $event['message']['text']);
-//                    $result = $bot->replyText($event['replyToken'], 'ini pesan balasan');
-//
-//                    // or we can use replyMessage() instead to send reply message
-//                    // $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
-//                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
-//
-//
-//                    $response->getBody()->write($result->getJSONDecodedBody());
-//                    return $response
-//                        ->withHeader('Content-Type', 'application/json')
-//                        ->withStatus($result->getHTTPStatus());
-//                }
-//            }
-//        }
-//    }
-});
 $app->run();

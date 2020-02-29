@@ -60,7 +60,7 @@ if ($response->isSucceeded()) {
 }
 
 // Failed
-echo $response->getHTTPStatus() . ' ' . $response->getRawBody();
+echo $response->getHTTPStatus . ' ' . $response->getRawBody();
 ```
 
 `LINEBot#replyMessage()` takes the reply token and `MessageBuilder`.
@@ -72,7 +72,7 @@ Components
 ### MessageBuilder
 
 The type of message that is sent depends on the type of instance of `MessageBuilder`.
-For example, the method sends a text message if you pass `TextMessageBuilder` and it sends an image message if you pass `ImageMessageBuilder`.
+For example, the method sends a text message if you pass `TextMessageBuilder` and it sends an image message if you pass `ImaageMessageBuilder`.
 
 For more detailed information on `MessageBuilder`, see `\LINE\LINEBot\MessageBuilder` and the namespace.
 
