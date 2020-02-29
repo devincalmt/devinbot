@@ -37,9 +37,10 @@ class Route
             $servername = "us-cdbr-iron-east-04.cleardb.net";
             $username = "b1f3fa9bda05bb";
             $password = "10d0741f";
+            $dbname = "heroku_fdb27654ad74a1b";
 
 // Create connection
-            $conn = mysqli_connect($servername, $username, $password);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
 
 // Check connection
             if (!$conn) {
