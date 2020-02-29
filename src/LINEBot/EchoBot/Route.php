@@ -81,13 +81,13 @@ class Route
                     echo "Connected successfully";
 
                     $sql = "SELECT * FROM help";
+//                    $sql = "";
                     $result = $conn->query($sql);
-
 
                     if ($result->num_rows > 0) {
                         // output data of each row
-                        while($row = $result->fetch_assoc()) {
-                            $str .= ($row["id"]. " " . $row["name"] . "<br>");
+                        while ($row = $result->fetch_assoc()) {
+                            $str .= ($row["id"] . " " . $row["name"] . "<br>");
                         }
                     } else {
                         echo "0 results";
@@ -99,6 +99,7 @@ class Route
                 $logger->info('Reply text: ' . $replyText);
                 $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
+            }
         });
     }
 }
