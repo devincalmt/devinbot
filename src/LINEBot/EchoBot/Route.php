@@ -34,10 +34,10 @@ class Route
         $app->get('/', function (Request $req, Response $res){
 //            $res->getBody()->write(":DD");
 //            return $res;
-            $servername = "us-cdbr-iron-east-04.cleardb.net";
-            $username = "b1f3fa9bda05bb";
-            $password = "10d0741f";
-            $dbname = "heroku_fdb27654ad74a1b";
+            $servername = getenv("SERVERNAME");
+            $username = getenv("USERNAME");
+            $password = getenv("PASSWORD");
+            $dbname = getenv("DBNAME");
 
 // Create connection
             $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -46,7 +46,7 @@ class Route
             if (!$conn) {
                 die("Connection failed: " . mysqli_connect_error());
             }
-            echo "Connected successfully";
+            echo "Connected successfully!";
         });
 
         $app->post('/', function (Request $req, Response $res) {
