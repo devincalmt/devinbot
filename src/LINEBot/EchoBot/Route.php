@@ -26,30 +26,32 @@ use LINE\LINEBot\Exception\InvalidSignatureException;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use LINE\LINEBot\EchoBot\UserController;
 
 class Route
 {
     public function register(App $app)
     {
-        $app->get('/', function (Request $req, Response $res){
-//            $res->getBody()->write(":DD");
-//            return $res;
-            $servername = "us-cdbr-iron-east-04.cleardb.net";
-            $username = "b1f3fa9bda05bb";
-            $password = "10d0741f";
-            $dbname = "heroku_fdb27654ad74a1b";
-
-// Create connection
-            $conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
-            echo "Connected successfully";
-
-            $this->test();
-        });
+        $app->get('/', 'UserController::index');
+//        $app->get('/', function (Request $req, Response $res){
+////            $res->getBody()->write(":DD");
+////            return $res;
+//            $servername = "us-cdbr-iron-east-04.cleardb.net";
+//            $username = "b1f3fa9bda05bb";
+//            $password = "10d0741f";
+//            $dbname = "heroku_fdb27654ad74a1b";
+//
+//// Create connection
+//            $conn = mysqli_connect($servername, $username, $password, $dbname);
+//
+//// Check connection
+//            if (!$conn) {
+//                die("Connection failed: " . mysqli_connect_error());
+//            }
+//            echo "Connected successfully";
+//
+//            $this->test();
+//        });
 
         $app->post('/', function (Request $req, Response $res) {
             /** @var \LINE\LINEBot $bot */

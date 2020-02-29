@@ -37,6 +37,13 @@ class Setting
                 ],
 
                 'apiEndpointBase' => getenv('LINEBOT_API_ENDPOINT_BASE'),
+
+                'db' => [
+                    'host' => 'us-cdbr-iron-east-04.cleardb.net',
+                    'user' => 'b1f3fa9bda05bb',
+                    'password' => '10d0741f',
+                    'dbname' => 'heroku_fdb27654ad74a1b'
+                ]
             ],
         ];
     }
