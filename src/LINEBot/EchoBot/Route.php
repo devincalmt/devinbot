@@ -26,7 +26,6 @@ use LINE\LINEBot\Exception\InvalidSignatureException;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use LINE\LINEBot\EchoBot\UserController;
 
 class Route
 {

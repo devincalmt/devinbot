@@ -46,5 +46,9 @@ class Dependency
             ]);
             return $bot;
         };
+
+        $container['UserController'] = function ($container) {
+            return new UserController($container->get('settings'));
+        };
     }
 }
