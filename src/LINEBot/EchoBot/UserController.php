@@ -15,10 +15,6 @@ use Slim\Http\Response;
 
 class UserController
 {
-    private $view;
-    private $logger;
-    protected $table;
-
     public function index (Request $req, Response $res)
     {
         $servername = "us-cdbr-iron-east-04.cleardb.net";
