@@ -24,6 +24,7 @@ use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Exception\InvalidEventRequestException;
 use LINE\LINEBot\Exception\InvalidSignatureException;
 use Slim\Http\Request;
+use Slim\Http\Response;
 
 class Route
 {
