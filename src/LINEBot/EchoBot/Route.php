@@ -32,7 +32,7 @@ class Route
 {
     public function register(App $app)
     {
-        $app->get('/', 'UserController::index');
+        $app->get('/', 'UserController:index');
 //        $app->get('/', function (Request $req, Response $res){
 ////            $res->getBody()->write(":DD");
 ////            return $res;
