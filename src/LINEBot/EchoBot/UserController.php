@@ -84,19 +84,22 @@ class UserController
 
                     $sql = "SELECT * FROM help";
                     $result = $conn->query($sql);
+                    $str = "";
 
                     if ($result->num_rows > 0) {
                         // output data of each row
                         while($row = $result->fetch_assoc()) {
-                            $replyText = $row["id"]. " " . $row["name"] . "<br>";
-                            $logger->info('Reply text: ' . $replyText);
-                            $resp = $bot->replyText($event->getReplyToken(), $replyText);
-                            $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
+                            $str .= ($row["id"]. " " . $row["name"] . "<br>");
                         }
                     } else {
                         echo "0 results";
                     }
                     $conn->close();
+
+                    $replyText = $str;
+                    $logger->info('Reply text: ' . $replyText);
+                    $resp = $bot->replyText($event->getReplyToken(), $replyText);
+                    $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
                 }
             }
 
