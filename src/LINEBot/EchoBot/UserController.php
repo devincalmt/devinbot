@@ -68,6 +68,8 @@ class UserController
                 return $res->withStatus(400, "Invalid event request");
             }
 
+            $str = "1";
+
             foreach ($events as $event) {
                 if ($event->getText() == 'help') {
                     $servername = "us-cdbr-iron-east-04.cleardb.net";
@@ -84,7 +86,7 @@ class UserController
 
                     $sql = "SELECT * FROM help";
                     $result = $conn->query($sql);
-                    $str = "";
+
 
                     if ($result->num_rows > 0) {
                         // output data of each row
@@ -95,12 +97,11 @@ class UserController
                         echo "0 results";
                     }
                     $conn->close();
-
-                    $replyText = $str;
-                    $logger->info('Reply text: ' . $replyText);
-                    $resp = $bot->replyText($event->getReplyToken(), $replyText);
-                    $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
                 }
+                $replyText = $str;
+                $logger->info('Reply text: ' . $replyText);
+                $resp = $bot->replyText($event->getReplyToken(), $replyText);
+                $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
             }
 
             $res->write('OK');
