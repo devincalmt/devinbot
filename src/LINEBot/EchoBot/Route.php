@@ -23,19 +23,20 @@ use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Exception\InvalidEventRequestException;
 use LINE\LINEBot\Exception\InvalidSignatureException;
+use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class Route
 {
-    public function register(\Slim\App $app)
+    public function register(App $app)
     {
         $app->get('/', function (Request $req, Response $res){
             $res->getBody()->write(":D");
             return $res;
         });
 
-        $app->post('/', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
+        $app->post('/', function (Request $req, Response $res) {
             /** @var \LINE\LINEBot $bot */
             $bot = $this->bot;
             /** @var \Monolog\Logger $logger */
