@@ -34,74 +34,71 @@ class Route
         $app->get('/', 'UserController:index');
 
 //        $app->post('/', 'UserController:help');
-        /** @var \LINE\LINEBot $bot */
-        $bot = $this->bot;
-        /** @var \Monolog\Logger $logger */
-        $logger = $this->logger;
+        $app->post('/', function (Request $req, Response $res) {
+            /** @var \LINE\LINEBot $bot */
+            $bot = $this->bot;
+            /** @var \Monolog\Logger $logger */
+            $logger = $this->logger;
 
-        $signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
-        if (empty($signature)) {
-            return $res->withStatus(400, 'Bad Request');
-        }
-
-        // Check request with signature and parse request
-        try {
-            $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
-        } catch (InvalidSignatureException $e) {
-            return $res->withStatus(400, 'Invalid signature');
-        } catch (InvalidEventRequestException $e) {
-            return $res->withStatus(400, "Invalid event request");
-        }
-
-        $str = "1";
-
-        foreach ($events as $event) {
-            if (!($event instanceof MessageEvent)) {
-                $logger->info('Non message event has come');
-                continue;
+            $signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
+            if (empty($signature)) {
+                return $res->withStatus(400, 'Bad Request');
             }
 
-            if (!($event instanceof TextMessage)) {
-                $logger->info('Non text message has come');
-                continue;
+            // Check request with signature and parse request
+            try {
+                $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
+            } catch (InvalidSignatureException $e) {
+                return $res->withStatus(400, 'Invalid signature');
+            } catch (InvalidEventRequestException $e) {
+                return $res->withStatus(400, "Invalid event request");
             }
 
-            if ($event->getText() == 'help') {
-                $servername = "us-cdbr-iron-east-04.cleardb.net";
-                $username = "b1f3fa9bda05bb";
-                $password = "10d0741f";
-                $dbname = "heroku_fdb27654ad74a1b";
+            $str = "1";
 
-                $conn = mysqli_connect($servername, $username, $password, $dbname);
-
-                if (!$conn) {
-                    die("Connection failed: " . mysqli_connect_error());
+            foreach ($events as $event) {
+                if (!($event instanceof MessageEvent)) {
+                    $logger->info('Non message event has come');
+                    continue;
                 }
-                echo "Connected successfully";
 
-                $sql = "SELECT * FROM help";
-                $result = $conn->query($sql);
+                if (!($event instanceof TextMessage)) {
+                    $logger->info('Non text message has come');
+                    continue;
+                }
 
+                if ($event->getText() == 'help') {
+                    $servername = "us-cdbr-iron-east-04.cleardb.net";
+                    $username = "b1f3fa9bda05bb";
+                    $password = "10d0741f";
+                    $dbname = "heroku_fdb27654ad74a1b";
 
-                if ($result->num_rows > 0) {
-                    // output data of each row
-                    while($row = $result->fetch_assoc()) {
-                        $str .= ($row["id"]. " " . $row["name"] . "<br>");
+                    $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+                    if (!$conn) {
+                        die("Connection failed: " . mysqli_connect_error());
                     }
-                } else {
-                    echo "0 results";
-                }
-                $conn->close();
-            }
-//                $replyText = $event->getText();
-            $replyText = $str;
-            $logger->info('Reply text: ' . $replyText);
-            $resp = $bot->replyText($event->getReplyToken(), $replyText);
-            $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
-            }
+                    echo "Connected successfully";
 
-            $res->write('OK');
-            return $res;
+                    $sql = "SELECT * FROM help";
+                    $result = $conn->query($sql);
+
+
+                    if ($result->num_rows > 0) {
+                        // output data of each row
+                        while($row = $result->fetch_assoc()) {
+                            $str .= ($row["id"]. " " . $row["name"] . "<br>");
+                        }
+                    } else {
+                        echo "0 results";
+                    }
+                    $conn->close();
+                }
+//                $replyText = $event->getText();
+                $replyText = $str;
+                $logger->info('Reply text: ' . $replyText);
+                $resp = $bot->replyText($event->getReplyToken(), $replyText);
+                $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
         });
     }
 }
