@@ -94,8 +94,4 @@ class Route
 //            return $res;
 //        });
     }
-
-    public function test(){
-        echo 'a';
-    }
 }
