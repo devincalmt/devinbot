@@ -54,7 +54,7 @@ class Route
                 return $res->withStatus(400, "Invalid event request");
             }
 
-            $str = "1";
+            $str = "";
 
             foreach ($events as $event) {
                 if (!($event instanceof MessageEvent)) {
