@@ -32,8 +32,20 @@ class Route
     public function register(App $app)
     {
         $app->get('/', function (Request $req, Response $res){
-            $res->getBody()->write(":DD");
-            return $res;
+//            $res->getBody()->write(":DD");
+//            return $res;
+            $servername = "us-cdbr-iron-east-04.cleardb.net";
+            $username = "b1f3fa9bda05bb";
+            $password = "10d0741f";
+
+// Create connection
+            $conn = mysqli_connect($servername, $username, $password);
+
+// Check connection
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+            echo "Connected successfully";
         });
 
         $app->post('/', function (Request $req, Response $res) {
@@ -67,8 +79,7 @@ class Route
                     continue;
                 }
 
-//                $replyText = $event->getText();
-                $replyText = "hahahha";
+                $replyText = $event->getText();
                 $logger->info('Reply text: ' . $replyText);
                 $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
