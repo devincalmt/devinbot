@@ -42,6 +42,9 @@ class Route
 
 //        $app->post('/', 'UserController:help');
         $app->post('/', function (Request $req, Response $res) {
+            $this->db = Connection::getInstance();
+            $this->conn = $this->db->getConnection();
+
             /** @var \LINE\LINEBot $bot */
             $bot = $this->bot;
             /** @var \Monolog\Logger $logger */
