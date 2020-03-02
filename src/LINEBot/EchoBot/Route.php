@@ -30,11 +30,11 @@ use Slim\Http\Response;
 class Route
 {
     private $db, $conn;
-    public function __construct()
-    {
-        $this->db = Connection::getInstance();
-        $this->conn = $this->db->getConnection();
-    }
+//    public function __construct()
+//    {
+//        $this->db = Connection::getInstance();
+//        $this->conn = $this->db->getConnection();
+//    }
 
     public function register(App $app)
     {
