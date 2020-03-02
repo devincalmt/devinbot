@@ -92,6 +92,7 @@ class Route
                         foreach ($member as $m){
                             $str .= $m . '\n';
                         }
+                        $str = 'success';
                     }
                     catch (Exception $e) {
                         $str = 'failed';
