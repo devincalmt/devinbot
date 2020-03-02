@@ -4,6 +4,8 @@
 namespace LINE\LINEBot\EchoBot;
 
 
+use mysqli;
+
 class Connection
 {
     private $_connection;
