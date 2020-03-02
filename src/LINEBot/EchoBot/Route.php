@@ -30,11 +30,19 @@ use Slim\Http\Response;
 class Route
 {
     private $db, $conn;
-//    public function __construct()
-//    {
-//        $this->db = Connection::getInstance();
-//        $this->conn = $this->db->getConnection();
-//    }
+    private static $_instance; //The single instance
+    public function __construct()
+    {
+        $this->db = Connection::getInstance();
+        $this->conn = $this->db->getConnection();
+    }
+
+    public static function getInstance() {
+        if(!self::$_instance) { // If no instance then make one
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
 
     public function register(App $app)
     {
@@ -42,9 +50,6 @@ class Route
 
 //        $app->post('/', 'UserController:help');
         $app->post('/', function (Request $req, Response $res) {
-            $this->db = Connection::getInstance();
-            $this->conn = $this->db->getConnection();
-
             /** @var \LINE\LINEBot $bot */
             $bot = $this->bot;
             /** @var \Monolog\Logger $logger */
