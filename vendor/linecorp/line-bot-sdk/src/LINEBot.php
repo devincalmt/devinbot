@@ -341,16 +341,14 @@ class LINEBot
     {
         $memberIds = [];
         $continuationToken = null;
-//        do {
-//            $response = $this->getGroupMemberIds($groupId, $continuationToken);
-//            $data = $response->getJSONDecodedBody();
-//            $memberIds = array_merge($memberIds, $data['memberIds']);
-//            $continuationToken = isset($data['next']) ? $data['next'] : null;
-//        } while ($continuationToken);
-        $response = $this->getGroupMemberIds($groupId, $continuationToken);
-        $data = print_r($response->getJSONDecodedBody(), true);
+        do {
+            $response = $this->getGroupMemberIds($groupId, $continuationToken);
+            $data = $response->getJSONDecodedBody();
+            $memberIds = array_merge($memberIds, $data['memberIds']);
+            $continuationToken = isset($data['next']) ? $data['next'] : null;
+        } while ($continuationToken);
 
-        return $data;
+        return $memberIds;
     }
 
     /**

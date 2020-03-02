@@ -89,9 +89,9 @@ class Route
 
                 if ($event->getText() == 'all') {
                     $member = $bot->getAllGroupMemberIds($event->getGroupId());
-//                    foreach ($member as $m){
-//                        $str .= $m . '\n';
-//                    }
+                    foreach ($member as $m){
+                        $str .= $m . '\n';
+                    }
                     $str .= $member;
                 }
 
