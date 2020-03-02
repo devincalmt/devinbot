@@ -88,8 +88,7 @@ class Route
                 }
 
                 if ($event->getText() == 'all') {
-                    $member = $bot->getAllGroupMemberIds("C466e45882afc7826e8712094dcc9994e");
-//                    $member = $bot->getAllGroupMemberIds($event->getGroupId());
+                    $member = $bot->getAllGroupMemberIds($event->getGroupId());
 //                    foreach ($member as $m){
 //                        $str .= $m . '\n';
 //                    }

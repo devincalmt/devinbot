@@ -348,7 +348,7 @@ class LINEBot
             $continuationToken = isset($data['next']) ? $data['next'] : null;
         } while ($continuationToken);
 
-        return $memberIds;
+        return "aaa";
     }
 
     /**
