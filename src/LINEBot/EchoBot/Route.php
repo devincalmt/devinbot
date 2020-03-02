@@ -92,7 +92,7 @@ class Route
 //                    foreach ($member as $m){
 //                        $str .= $m . '\n';
 //                    }
-                    $str .= gettype($member);
+                    $str .= $member;
                 }
 
 //                $replyText = $event->getText();
