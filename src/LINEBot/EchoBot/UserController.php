@@ -9,6 +9,7 @@ use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Exception\InvalidEventRequestException;
 use LINE\LINEBot\Exception\InvalidSignatureException;
+use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -120,5 +121,12 @@ class UserController
 
             $res->write('OK');
             return $res;
+    }
+
+    function replyStickerMessage($bot,$replyToken,$packageId,$stickerId) {
+        $response = $bot->replyMessage($replyToken,new StickerMessageBuilder($packageId,$stickerId));
+        if (!$response->isSucceeded()) {
+            error_log('replyStickerMessage :' . $response->getHTTPStatus() . ' ' . $response->getRawBody());
+        }
     }
 }

@@ -24,6 +24,7 @@ use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Exception\InvalidEventRequestException;
 use LINE\LINEBot\Exception\InvalidSignatureException;
+use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -63,14 +64,16 @@ class Route
             $str = "";
 
             foreach ($events as $event) {
-                if (!($event instanceof MessageEvent)) {
-                    $logger->info('Non message event has come');
-                    continue;
-                }
-
-                if (!($event instanceof TextMessage)) {
-                    $logger->info('Non text message has come');
-                    continue;
+                if ($event.getSource() instanceof GroupSource || $event.getSource() instanceof RoomSource) {
+                    if ($event->getText() == 'all') {
+                        $member = $bot->getAllGroupMemberIds($event->getGroupId());
+                        foreach ($member as $m){
+                            $str .= $m . '\n';
+                        }
+                        $str .= $member;
+                    }
+                } else {
+                    // from 1-on-1 chat
                 }
 
                 if ($event->getText() == 'help') {
@@ -86,13 +89,8 @@ class Route
                         echo "0 results";
                     }
                 }
-
-                if ($event->getText() == 'all') {
-                    $member = $bot->getAllGroupMemberIds($event->getGroupId());
-                    foreach ($member as $m){
-                        $str .= $m . '\n';
-                    }
-                    $str .= $member;
+                if ($event->getText() == 'ngambek') {
+                    $this->replyStickerMessage($bot, $event->getReplyToken(), 11539,52114135);
                 }
 
 //                $replyText = $event->getText();
@@ -102,5 +100,12 @@ class Route
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
             }
         });
+    }
+
+    function replyStickerMessage($bot,$replyToken,$packageId,$stickerId) {
+        $response = $bot->replyMessage($replyToken,new StickerMessageBuilder($packageId,$stickerId));
+        if (!$response->isSucceeded()) {
+            error_log('replyStickerMessage :' . $response->getHTTPStatus() . ' ' . $response->getRawBody());
+        }
     }
 }
