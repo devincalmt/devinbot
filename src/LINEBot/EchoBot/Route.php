@@ -87,7 +87,7 @@ class Route
                 }
 
                 if ($event->getText() == 'all') {
-                    $str = $event->getGroupId();
+                    $str = $bot->getAllGroupMemberIds($event->getGroupId());
                 }
 
 //                $replyText = $event->getText();
