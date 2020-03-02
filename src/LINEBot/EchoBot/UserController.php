@@ -17,8 +17,8 @@ class UserController
 {
     public function index (Request $req, Response $res)
     {
-//        $db = Connection::getInstance();
-//        $conn = $db->getConnection();
+        $db = Connection::getInstance();
+        $conn = $db->getConnection();
 //        $servername = "us-cdbr-iron-east-04.cleardb.net";
 //        $username = "b1f3fa9bda05bb";
 //        $password = "10d0741f";
@@ -31,20 +31,20 @@ class UserController
 //        }
 //        echo "Connected successfully";
 //
-//        $sql = "SELECT * FROM help";
-//        $result = $conn->query($sql);
+        $sql = "SELECT * FROM help";
+        $result = $conn->query($sql);
 //
-//        if ($result->num_rows > 0) {
-//            // output data of each row
-//            while($row = $result->fetch_assoc()) {
-//                echo $row["id"]. " " . $row["name"] . "<br>";
-//            }
-//        } else {
-//            echo "0 results";
-//        }
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                echo $row["id"]. " " . $row["name"] . "<br>";
+            }
+        } else {
+            echo "0 results";
+        }
 
 //        $conn->close();
-        echo "test";
+//        echo "test";
     }
 
     public function displayHelp(Request $req, Response $res){
