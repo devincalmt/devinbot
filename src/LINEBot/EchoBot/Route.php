@@ -88,15 +88,9 @@ class Route
                 }
 
                 if ($event->getText() == 'all') {
-                    try {
-                        $member = $bot->getAllGroupMemberIds($event->getGroupId());
-                        foreach ($member as $m){
-                            $str .= $m . '\n';
-                        }
-                        $str = 'success';
-                    }
-                    catch (Exception $e) {
-                        $str = 'failed';
+                    $member = $bot->getAllGroupMemberIds($event->getGroupId());
+                    foreach ($member as $m){
+                        $str .= $m . '\n';
                     }
                 }
 
