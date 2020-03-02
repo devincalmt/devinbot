@@ -64,18 +64,13 @@ class Route
             $str = "";
 
             foreach ($events as $event) {
-                if ($event.getSource() instanceof GroupSource || $event.getSource() instanceof RoomSource) {
-                    if ($event->getText() == 'all') {
-                        $member = $bot->getAllGroupMemberIds($event->getGroupId());
-                        foreach ($member as $m){
-                            $str .= $m . '\n';
-                        }
-                        $str .= $member;
+                if ($event->getText() == 'all') {
+                    $member = $bot->getAllGroupMemberIds($event->getGroupId());
+                    foreach ($member as $m){
+                        $str .= $m . '\n';
                     }
-                } else {
-                    // from 1-on-1 chat
+                    $str .= $member;
                 }
-
                 if ($event->getText() == 'help') {
                     $sql = "SELECT * FROM help";
                     $result = $this->conn->query($sql);
@@ -90,7 +85,7 @@ class Route
                     }
                 }
                 if ($event->getText() == 'ngambek') {
-                    $this->replyStickerMessage($bot, $event->getReplyToken(), 11539,52114135);
+                    $response = $bot->replyMessage( $event->getReplyToken(),new StickerMessageBuilder(11539,52114135));
                 }
 
 //                $replyText = $event->getText();
@@ -100,12 +95,5 @@ class Route
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
             }
         });
-    }
-
-    function replyStickerMessage($bot,$replyToken,$packageId,$stickerId) {
-        $response = $bot->replyMessage($replyToken,new StickerMessageBuilder($packageId,$stickerId));
-        if (!$response->isSucceeded()) {
-            error_log('replyStickerMessage :' . $response->getHTTPStatus() . ' ' . $response->getRawBody());
-        }
     }
 }
