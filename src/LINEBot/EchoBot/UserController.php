@@ -17,12 +17,14 @@ class UserController
 {
     public function index (Request $req, Response $res)
     {
-        $servername = "us-cdbr-iron-east-04.cleardb.net";
-        $username = "b1f3fa9bda05bb";
-        $password = "10d0741f";
-        $dbname = "heroku_fdb27654ad74a1b";
+        $db = Connection::getInstance();
+        $conn = $db->getConnection();
+//        $servername = "us-cdbr-iron-east-04.cleardb.net";
+//        $username = "b1f3fa9bda05bb";
+//        $password = "10d0741f";
+//        $dbname = "heroku_fdb27654ad74a1b";
 
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
+//        $conn = mysqli_connect($servername, $username, $password, $dbname);
 
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
