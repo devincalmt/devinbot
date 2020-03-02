@@ -350,7 +350,7 @@ class LINEBot
         $response = $this->getGroupMemberIds($groupId, $continuationToken);
         $data = $response->getJSONDecodedBody();
 
-        return $data['memberIds'];
+        return $data;
     }
 
     /**
