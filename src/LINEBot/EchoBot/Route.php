@@ -18,6 +18,7 @@
 
 namespace LINE\LINEBot\EchoBot;
 
+use http\Exception;
 use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
