@@ -17,8 +17,8 @@ class UserController
 {
     public function index (Request $req, Response $res)
     {
-        $db = Connection::getInstance();
-        $conn = $db->getConnection();
+//        $db = Connection::getInstance();
+//        $conn = $db->getConnection();
 //        $servername = "us-cdbr-iron-east-04.cleardb.net";
 //        $username = "b1f3fa9bda05bb";
 //        $password = "10d0741f";
@@ -26,24 +26,25 @@ class UserController
 
 //        $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        echo "Connected successfully";
+//        if (!$conn) {
+//            die("Connection failed: " . mysqli_connect_error());
+//        }
+//        echo "Connected successfully";
+//
+//        $sql = "SELECT * FROM help";
+//        $result = $conn->query($sql);
+//
+//        if ($result->num_rows > 0) {
+//            // output data of each row
+//            while($row = $result->fetch_assoc()) {
+//                echo $row["id"]. " " . $row["name"] . "<br>";
+//            }
+//        } else {
+//            echo "0 results";
+//        }
 
-        $sql = "SELECT * FROM help";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            // output data of each row
-            while($row = $result->fetch_assoc()) {
-                echo $row["id"]. " " . $row["name"] . "<br>";
-            }
-        } else {
-            echo "0 results";
-        }
-
-        $conn->close();
+//        $conn->close();
+        echo "test";
     }
 
     public function displayHelp(Request $req, Response $res){
