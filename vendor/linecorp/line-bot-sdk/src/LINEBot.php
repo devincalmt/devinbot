@@ -348,7 +348,7 @@ class LINEBot
 //            $continuationToken = isset($data['next']) ? $data['next'] : null;
 //        } while ($continuationToken);
         $response = $this->getGroupMemberIds($groupId, $continuationToken);
-        $data = $response->getJSONDecodedBody();
+        $data = print_r($response->getJSONDecodedBody());
 
         return $data;
     }
