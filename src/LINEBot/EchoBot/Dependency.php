@@ -50,5 +50,9 @@ class Dependency
         $container['UserController'] = function ($container) {
             return new UserController($container->get('settings'));
         };
+
+        $container['Connection'] = function () {
+            $conn = Connection::getInstance();
+        };
     }
 }
