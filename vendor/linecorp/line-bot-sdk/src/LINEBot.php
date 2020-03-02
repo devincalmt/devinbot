@@ -71,6 +71,31 @@ class LINEBot
     }
 
     /**
+     * Gets the user IDs of the members of a group that the bot is in.
+     * This includes the user IDs of users who have not added the bot as a friend or has blocked the bot.
+     * This method gets all of the members by calling getGroupMemberIds() continually using token
+     *
+     * This feature is only available for LINE@ Approved accounts or official accounts.
+     *
+     * @param string $groupId Identifier of the group
+     * @return array memberIds
+     * @see \LINE\LINEBot::getGroupMemberIds()
+     */
+    public function getAllGroupMemberIds($groupId)
+    {
+        $memberIds = [];
+        $continuationToken = null;
+        do {
+            $response = $this->getGroupMemberIds($groupId, $continuationToken);
+            $data = $response->getJSONDecodedBody();
+            $memberIds = array_merge($memberIds, $data['memberIds']);
+            $continuationToken = isset($data['next']) ? $data['next'] : null;
+        } while ($continuationToken);
+
+        return $memberIds;
+    }
+
+    /**
      * Gets message content which is associated with specified message ID.
      *
      * @param string $messageId The message ID to retrieve content.

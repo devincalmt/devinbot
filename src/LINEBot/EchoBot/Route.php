@@ -85,6 +85,11 @@ class Route
                         echo "0 results";
                     }
                 }
+
+                if ($event->getText() == 'all') {
+                    $str = $event->getGroupId();
+                }
+
 //                $replyText = $event->getText();
                 $replyText = $str;
                 $logger->info('Reply text: ' . $replyText);
